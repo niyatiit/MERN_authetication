@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+
+const Login = () => {
+  const [state, setState] = useState("Sign-Up");
+
+  return (
+    <>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-purple-200 via-pink-100 to-blue-200">
+        {/* Logo & App Name */}
+        <div className="flex items-center gap-2 absolute top-6 left-6">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+            alt="Logo"
+            className="h-8 w-8"
+          />
+          <span className="text-xl font-bold text-gray-800">auth</span>
+        </div>
+
+        {/* Login / Sign Up Card */}
+        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+          <h2 className="text-2xl text-center">
+            {state === "Sign-Up" ? "Create Account" : "Login"}
+          </h2>
+          <p className="text-center text-gray-500 mb-6">
+            {state === "Sign-Up"
+              ? "Create your account"
+              : "Login to your account!"}
+          </p>
+
+          <form className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-600">
+                Username
+              </label>
+              <input
+                type="text"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                placeholder="Enter your username"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600">
+                Email
+              </label>
+              <input
+                type="email"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-600">
+                Password
+              </label>
+              <input
+                type="password"
+                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                placeholder="Enter your password"
+              />
+            </div>
+
+            <div className="flex justify-between text-sm">
+              <a
+                href="/email-verify"
+                className="text-purple-600 hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-purple-600 text-white py-2 rounded-lg font-semibold hover:bg-purple-700 transition duration-200 cursor-pointer"
+            >
+              {state}
+            </button>
+          </form>
+
+          <p className="text-sm text-center text-gray-600 mt-6"> Already have an account ? <span className="text-purple-600 hover:underline cursor-pointer"> Login here </span> </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Login;

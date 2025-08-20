@@ -19,11 +19,12 @@ app.get("/",(req,res)=>{
 
 // Import Here All the Router
 import router from "./router/auth.route.js"
+import userRouter from "./router/user.route.js"
 
 
 // All Localhost Link Here
 app.use("/api/auth" , router)
-
+app.use("/api/user" , userRouter)
 
 app.listen(port , ()=>{
    console.log(`port number :  ${port}`)
