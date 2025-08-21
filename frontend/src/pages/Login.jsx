@@ -1,7 +1,38 @@
-import React, { useState } from "react";
-
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import axios from 'axios'
+import { toast} from 'react-toastify'
 const Login = () => {
+  const navigate = useNavigate();
+
+  const {backnedUrl , setUserData , setIsLoggedin} = useContext(AppContext)
   const [state, setState] = useState("Sign-Up");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmitHandler =async (e) =>{
+    try{
+      e.preventDefault()
+      axios.defaults.withCredentials = true;
+      if(state === 'Sign-Up'){
+        const {data} = await axios.post(backnedUrl + '/api/auth/register' ,{username , email , password})
+
+        if(data.success){
+          setIsLoggedin(true)
+          navigate('/')
+        }
+        else{
+          toast.error(data.message)
+
+        }
+      }
+    }
+    catch(err){
+      toast.error(err)
+    }
+  } 
 
   return (
     <>
@@ -27,23 +58,29 @@ const Login = () => {
               : "Login to your account!"}
           </p>
 
-          <form className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-600">
-                Username
-              </label>
-              <input
-                type="text"
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
-                placeholder="Enter your username"
-              />
-            </div>
+          <form className="space-y-5" onSubmit={onSubmitHandler}>
+            {state === "Sign-Up" && (
+              <div>
+                <label className="block text-sm font-medium text-gray-600">
+                  Username
+                </label>
+                <input
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                  type="text"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                  placeholder="Enter your username"
+                />
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-600">
                 Email
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 type="email"
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
                 placeholder="Enter your email"
@@ -55,19 +92,21 @@ const Login = () => {
                 Password
               </label>
               <input
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 type="password"
                 className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-purple-400 focus:outline-none"
                 placeholder="Enter your password"
               />
             </div>
 
-            <div className="flex justify-between text-sm">
-              <a
-                href="/email-verify"
+            <div className="flex justify-between text-sm hover:cursor-pointer">
+              <p
+                onClick={() => navigate("/reset-password")}
                 className="text-purple-600 hover:underline"
               >
                 Forgot password?
-              </a>
+              </p>
             </div>
 
             <button
@@ -78,7 +117,31 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="text-sm text-center text-gray-600 mt-6"> Already have an account ? <span className="text-purple-600 hover:underline cursor-pointer"> Login here </span> </p>
+          {state === "Sign-Up" ? (
+            <p className="text-sm text-center text-gray-600 mt-6">
+              {" "}
+              Already have an account ?{" "}
+              <span
+                onClick={() => setState("Login")}
+                className="text-purple-600 hover:underline cursor-pointer"
+              >
+                {" "}
+                Login here{" "}
+              </span>{" "}
+            </p>
+          ) : (
+            <p className="text-sm text-center text-gray-600 mt-2">
+              {" "}
+              Don't have an account ?{" "}
+              <span
+                onClick={() => setState("Sign-Up")}
+                className="text-purple-600 hover:underline cursor-pointer"
+              >
+                {" "}
+                Sign Up{" "}
+              </span>{" "}
+            </p>
+          )}
         </div>
       </div>
     </>
